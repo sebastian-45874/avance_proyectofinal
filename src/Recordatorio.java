@@ -1,3 +1,4 @@
+//Joan Chiscuet
 public class Recordatorio {
 
     private String cedulaPaciente;

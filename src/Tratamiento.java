@@ -1,3 +1,4 @@
+//Joan Chiscuet
 public class Tratamiento {
 
     private String cedulaPaciente;
