@@ -1,5 +1,6 @@
 //Joan Chiscuet
 public class Tratamiento {
+    // Vinicio Ruiz
 
     private String cedulaPaciente;
     private String medicamento;

@@ -1,5 +1,6 @@
 //Joan Chiscuet
 public class Recordatorio {
+    //Vinicio Ruiz
 
     private String cedulaPaciente;
     private String descripcion;
