@@ -1,5 +1,4 @@
 //Andres Sigcha
-//Julian Gordon
 import java.util.ArrayList;
 import java.util.List;
 

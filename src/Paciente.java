@@ -1,3 +1,5 @@
+//Julian Gordon
+
 public class Paciente {
 
     private String cedula;

@@ -1,3 +1,4 @@
+//Michael Cordova
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.List;
@@ -344,7 +345,6 @@ public class Ventana {
             JOptionPane.showMessageDialog(panel1, "Estado actualizado");
         });
 
-        // (opcional, mantener doble clic)
         lstAgenda_Recordatorios.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
