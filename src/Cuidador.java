@@ -1,5 +1,5 @@
+//Mateo Cuascota
 public class Cuidador {
-
     private String cedula;
     private String nombre;
     private String contacto;
