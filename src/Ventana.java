@@ -42,6 +42,7 @@ public class Ventana {
     private JTextField txtEditarMedicamento;
     private JButton btnEditarMedicamento;
     private JButton btnRegistrarEstadoDeRecordatorio;
+    private JList lstReactivar;                          // JList para tratamientos finalizados
 
     private GestorPacientes gestorPacientes = new GestorPacientes();
     private GestorTratamientos gestorTratamientos = new GestorTratamientos();
@@ -56,14 +57,27 @@ public class Ventana {
         return true;
     }
 
+    // ==================== TRATAMIENTOS: ACTUALIZAR LISTAS ====================
+    // Izquierda: tratamientos activos (estado "SI")
+    // Derecha: tratamientos no activos/finalizados (estado "NO")
     private void actualizarListaTratamientos(String cedula) {
         if (!esNumero(cedula)) return;
-        String opcion = (String) comboBox2.getSelectedItem();
-        if (opcion == null) opcion = "SI";
-        List<Tratamiento> lista = gestorTratamientos.obtenerPorEstado(cedula, opcion);
-        DefaultListModel modelo = new DefaultListModel();
-        for (Tratamiento t : lista) modelo.addElement(t.toString());
-        lstGestion_Tratamientos.setModel(modelo);
+
+        // Activos
+        List<Tratamiento> listaActivos = gestorTratamientos.obtenerPorEstado(cedula, "SI");
+        DefaultListModel modeloActivos = new DefaultListModel();
+        for (Tratamiento t : listaActivos) {
+            modeloActivos.addElement(t.toString());
+        }
+        lstGestion_Tratamientos.setModel(modeloActivos);
+
+        // No activos / finalizados
+        List<Tratamiento> listaNoActivos = gestorTratamientos.obtenerPorEstado(cedula, "NO");
+        DefaultListModel modeloFinalizados = new DefaultListModel();
+        for (Tratamiento t : listaNoActivos) {
+            modeloFinalizados.addElement(t.toString());
+        }
+        lstReactivar.setModel(modeloFinalizados);
     }
 
     private void actualizarListaAgendaPorCedula(String cedula) {
@@ -226,12 +240,14 @@ public class Ventana {
             JOptionPane.showMessageDialog(panel1, "Medicamento agregado");
         });
 
+        // Ya no filtra por SI/NO, solo recarga las listas
         comboBox2.addActionListener(e -> {
             String cedula = txtCedulaCrearTratamiento.getText();
             if (!esNumero(cedula)) return;
             actualizarListaTratamientos(cedula);
         });
 
+        // FINALIZAR: desde la lista de ACTIVOS (izquierda) pasa a NO activo
         btnFinalizarTratamiento.addActionListener(e -> {
             String cedula = txtCedulaCrearTratamiento.getText();
             if (!esNumero(cedula)) return;
@@ -240,21 +256,22 @@ public class Ventana {
                 JOptionPane.showMessageDialog(panel1, "Seleccione un tratamiento");
                 return;
             }
-            String opcion = (String) comboBox2.getSelectedItem();
+            String opcion = "SI"; // viene de activos
             gestorTratamientos.cambiarEstado(cedula, opcion, idx, 0);
             actualizarListaTratamientos(cedula);
             JOptionPane.showMessageDialog(panel1, "Tratamiento finalizado");
         });
 
+        // REACTIVAR: desde la lista de FINALIZADOS (derecha) vuelve a ACTIVO
         btnReactivarTratamiento.addActionListener(e -> {
             String cedula = txtCedulaCrearTratamiento.getText();
             if (!esNumero(cedula)) return;
-            int idx = lstGestion_Tratamientos.getSelectedIndex();
+            int idx = lstReactivar.getSelectedIndex();
             if (idx == -1) {
                 JOptionPane.showMessageDialog(panel1, "Seleccione un tratamiento");
                 return;
             }
-            String opcion = (String) comboBox2.getSelectedItem();
+            String opcion = "NO"; // viene de no activos
             gestorTratamientos.cambiarEstado(cedula, opcion, idx, 1);
             actualizarListaTratamientos(cedula);
             JOptionPane.showMessageDialog(panel1, "Tratamiento reactivado");
@@ -427,3 +444,4 @@ public class Ventana {
         frame.setVisible(true);
     }
 }
+
