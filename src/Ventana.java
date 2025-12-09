@@ -57,28 +57,37 @@ public class Ventana {
         return true;
     }
 
-    // ==================== TRATAMIENTOS: ACTUALIZAR LISTAS ====================
-    // Izquierda: tratamientos activos (estado "SI")
-    // Derecha: tratamientos no activos/finalizados (estado "NO")
+
     private void actualizarListaTratamientos(String cedula) {
         if (!esNumero(cedula)) return;
 
-        // Activos
-        List<Tratamiento> listaActivos = gestorTratamientos.obtenerPorEstado(cedula, "SI");
-        DefaultListModel modeloActivos = new DefaultListModel();
-        for (Tratamiento t : listaActivos) {
-            modeloActivos.addElement(t.toString());
-        }
-        lstGestion_Tratamientos.setModel(modeloActivos);
+        String opcion = (String) comboBox2.getSelectedItem();
+        if (opcion == null) opcion = "NO";
 
-        // No activos / finalizados
-        List<Tratamiento> listaNoActivos = gestorTratamientos.obtenerPorEstado(cedula, "NO");
-        DefaultListModel modeloFinalizados = new DefaultListModel();
-        for (Tratamiento t : listaNoActivos) {
-            modeloFinalizados.addElement(t.toString());
+        DefaultListModel modeloActivos = new DefaultListModel();
+        DefaultListModel modeloInactivos = new DefaultListModel();
+
+
+        if ("SI".equals(opcion)) {
+
+
+            List<Tratamiento> activos = gestorTratamientos.obtenerPorEstado(cedula, "SI");
+            for (Tratamiento t : activos) {
+                modeloActivos.addElement(t.toString());
+            }
+
+
+            List<Tratamiento> inactivos = gestorTratamientos.obtenerPorEstado(cedula, "NO");
+            for (Tratamiento t : inactivos) {
+                modeloInactivos.addElement(t.toString());
+            }
         }
-        lstReactivar.setModel(modeloFinalizados);
+
+        lstGestion_Tratamientos.setModel(modeloActivos);
+        lstReactivar.setModel(modeloInactivos);
     }
+
+
 
     private void actualizarListaAgendaPorCedula(String cedula) {
         if (!esNumero(cedula)) return;
